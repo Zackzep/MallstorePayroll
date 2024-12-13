@@ -57,12 +57,13 @@ namespace Midterm_MallStores
         //Method for store cost
         public double StoreCost(double storecost)
         {
-            foreach(Employee emp in Employees)
+            double totalCost = _weeklyCost + Manager.MWeeklyPay();
+            foreach (Employee emp in Employees)
             {
-                storecost = _weeklyCost + emp.EWeeklyPay() + Manager.MWeeklyPay();
-                
+                totalCost += emp.EWeeklyPay();
+
             }
-            return storecost;
+            return totalCost;
         }
 
         //Hire employee method

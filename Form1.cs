@@ -64,47 +64,57 @@ namespace Midterm_MallStores
             string elastName = tbLastName.Text;
             int eweeklyHours = int.Parse(tbHours.Text);
             double ehourlyPay = double.Parse(tbHourlyPay.Text);
-            
 
+            // Create a new employee
             Employee newEmployee = new Employee(efirstName, elastName, eweeklyHours, ehourlyPay);
-            
-            foreach(Store storeb in storeslist)
+
+            // Get the index of the selected store
+            int index = cbStores.SelectedIndex;
+            if (index >= 0)
             {
-                storeb.HireEmployee(newEmployee);
-                int index = cbStores.SelectedIndex;
-                Store store = storeslist[index];
+                Store selectedStore = storeslist[index];
+                selectedStore.HireEmployee(newEmployee);
             }
-            
+
+            // Re-display all stores after hiring the employee
             DisplayAllStores(storeslist, cbStores);
-            
-            
+
+
         }
 
         
         //Display single store method
         public void DisplayStore(Store store)
         {
+            // Store header and manager info
             string displaystore = $"{store.StoreName} - {store.StoreCost(0).ToString("c")}\n" +
-                $"Manager: {store.Manager.MfirstName} {store.Manager.MlastName} - {store.Manager.MWeeklyPay().ToString("c")}\n" +
-                $"Employee: {store.Employees[0].EfirstName} {store.Employees[0].ElastName} - {store.Employees[0].EWeeklyPay().ToString("c")}\n" +
-                $"Employee: {store.Employees[1].EfirstName} {store.Employees[1].ElastName} - {store.Employees[1].EWeeklyPay().ToString("c")}\n\n";
-            
+                $"Manager: {store.Manager.MfirstName} {store.Manager.MlastName} - {store.Manager.MWeeklyPay().ToString("c")}\n";
 
-            rtbDisplay.Text += displaystore;
+            // Loop through all employees in the store
+            foreach (Employee employee in store.Employees)
+            {
+                displaystore += $"Employee: {employee.EfirstName} {employee.ElastName} - {employee.EWeeklyPay().ToString("c")}\n";
+            }
+
+            // Add the store info to the display area
+            rtbDisplay.Text += displaystore + "\n"; // Ensure you add a newline between stores
         }
 
         //Display all stores method
         public void DisplayAllStores(List<Store> stores, ComboBox cbStores)
         {
             cbStores.Items.Clear();
+            rtbDisplay.Clear();
 
             foreach (Store store in stores)
             {
-                DisplayStore(store);
+                cbStores.Items.Add(store.StoreName);
             }
-            foreach (Store storea in storeslist)
+
+            // Display each store's details in the rich text box
+            foreach (Store store in stores)
             {
-                cbStores.Items.Add($"{storea.StoreName}");
+                DisplayStore(store);
             }
 
         }
